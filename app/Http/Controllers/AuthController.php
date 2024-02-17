@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\VerificationCode;
 use Illuminate\Support\Facades\Cache;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
@@ -49,11 +50,13 @@ class AuthController extends Controller
         $user = $data['user'];
 
         $user->save();
+        $token = JWTAuth::fromUser($user);
 
         Cache::forget($request->phone_number);
 
         return response()->json([
-            'message' => 'Вы успешно зарегистрированы'
+            'message' => 'Вы успешно зарегистрированы',
+            'token' => $token
         ]);
     }
 

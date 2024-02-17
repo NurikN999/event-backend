@@ -31,7 +31,7 @@ class SendVerificationCode implements ShouldQueue
     {
         $api = new MobizonApi([
             'apiKey' => env('MOBIZON_API_KEY'),
-            'apiServer' => env('MOBIZON_API_SERVER', 'https://api.mobizon.kz')
+            'apiServer' => env('MOBIZON_API_SERVER', 'api.mobizon.kz')
         ]);
 
         $api->call('message', 'sendSMSMessage', [
