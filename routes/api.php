@@ -22,7 +22,7 @@ Route::post('/verify', [AuthController::class, 'verify']);
 Route::group(['middleware' => 'jwt.auth'], function () {
 
     Route::prefix('users')->group(function () {
-        Route::get('/', [UserController::class, 'index']);
+        Route::get('/', [UserController::class, 'index'])->middleware('can:is-admin');
         Route::get('/{user}', [UserController::class, 'show']);
         Route::put('/{user}', [UserController::class, 'update']);
     });
