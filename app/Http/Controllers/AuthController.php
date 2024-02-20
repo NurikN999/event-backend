@@ -39,7 +39,7 @@ class AuthController extends Controller
      *     @OA\Property(property="message", type="string", example="Мы отправили SMS с кодом активации на ваш телефон 1234567890")
      * )
      * )
-     *
+     * )
      */
     public function register(RegisterUserRequest $request)
     {
