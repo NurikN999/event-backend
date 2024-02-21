@@ -132,9 +132,8 @@ class AuthController extends Controller
                 'data' => $user
             ]);
         } else {
-            $user = User::create([
-                'phone_number' => $request->phone_number,
-            ]);
+            $user =$data['user'];
+            $user->save();
 
             $token = JWTAuth::fromUser($user);
 
