@@ -36,7 +36,7 @@ class SendVerificationCode implements ShouldQueue
 
         $api->call('message', 'sendSMSMessage', [
             'recipient' => $this->phone_number,
-            'text' => "Ваш код верификации: {$this->code}"
+            'text' => "ConciergeApp Ваш код верификации: {$this->code}",
         ]);
     }
 }
