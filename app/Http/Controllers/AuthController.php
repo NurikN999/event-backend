@@ -119,16 +119,52 @@ class AuthController extends Controller
             ], 400);
         }
 
-        $user = $data['user'];
-
-        $user->save();
-        $token = JWTAuth::fromUser($user);
-
         Cache::forget($request->phone_number);
 
+        $user = User::where('phone_number', $request->phone_number)->first();
+
+        if ($user) {
+            $token = JWTAuth::fromUser($user);
+
+            return response()->json([
+                'message' => 'Вы успешно авторизованы',
+                'token' => $token,
+                'data' => $user
+            ]);
+        } else {
+            $user = User::create([
+                'phone_number' => $request->phone_number,
+            ]);
+
+            $token = JWTAuth::fromUser($user);
+
+            return response()->json([
+                'message' => 'Вы успешно зарегистрированы',
+                'token' => $token,
+                'data' => $user
+            ]);
+        }
+    }
+
+    public function login(Request $request)
+    {
+        $phoneNumber = $request->input('phone_number');
+        $user = User::where('phone_number', $phoneNumber)->first();
+
+        if (!$user) {
+            return response()->json([
+                'message' => 'Пользователь не найден'
+            ], 404);
+        }
+
+        $code = rand(10000, 99999);
+
+        dispatch(new SendVerificationCode($user->phone_number, $code));
+
+        Cache::put($user->phone_number, ['user' => $user, 'code' => $code], 600);
+
         return response()->json([
-            'message' => 'Вы успешно зарегистрированы',
-            'token' => $token
+            'message' => 'Мы отправили SMS с кодом активации на ваш телефон ' . $user->phone_number
         ]);
     }
 
