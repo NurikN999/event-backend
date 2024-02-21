@@ -146,6 +146,40 @@ class AuthController extends Controller
         }
     }
 
+    /**
+     * Login user
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @OA\Post(
+     *  path="/login",
+     * tags={"Auth"},
+     * summary="Login user",
+     * description="Login user",
+     * operationId="login",
+     * @OA\RequestBody(
+     * required=true,
+     * description="User data",
+     * @OA\JsonContent(
+     * required={"phone_number"},
+     * @OA\Property(property="phone_number", type="string", format="text", example="1234567890"),
+     * )
+     * ),
+     * @OA\Response(
+     * response=200,
+     * description="Code sent successfully",
+     * @OA\JsonContent(
+     * @OA\Property(property="message", type="string", example="Мы отправили SMS с кодом активации на ваш телефон 1234567890")
+     *  )
+     * ),
+     * @OA\Response(
+     * response=404,
+     * description="User not found",
+     * @OA\JsonContent(
+     * @OA\Property(property="message", type="string", example="Пользователь не найден")
+     * )
+     * )
+     * )
+     */
     public function login(Request $request)
     {
         $phoneNumber = $request->input('phone_number');
