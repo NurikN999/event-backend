@@ -3,6 +3,8 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,6 +21,13 @@ use Illuminate\Support\Facades\Route;
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/verify', [AuthController::class, 'verify']);
+Route::get('/privacy-policy', function() {
+    $path = public_path('pp_app.html');
+    $file = File::get($path);
+    $response = Response::make($file, 200);
+    $response->header('Content-Type', 'text/html');
+    return $response;
+});
 
 Route::group(['middleware' => 'jwt.auth'], function () {
 
